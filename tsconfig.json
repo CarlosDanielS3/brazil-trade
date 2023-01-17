@@ -11,6 +11,14 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+        "paths": {
+          "@/*": [
+            "src/*"
+          ],
+          "@Helper/*": [
+            "src/common/helper/*"
+          ]
+        }
   }
 }
