@@ -1,0 +1,69 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Application",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:debug"],
+      "outputCapture": "std",
+      //"preLaunchTask": "typescript: tsconfig.json",
+      "internalConsoleOptions": "openOnFirstSessionStart",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "skipFiles": [
+        "${workspaceRoot}/node_modules/**/*.js",
+        "<node_internals>/**"
+      ]
+    },
+    // {
+    //   "type": "node",
+    //   "request": "launch",
+    //   "name": "Debug Current Tests",
+    //   "program": "npm",
+    //   "args": ["test", "-f", "${fileBasename}"],
+    //   "cwd": "${workspaceRoot}",
+    //   "internalConsoleOptions": "openOnSessionStart",
+    //   "skipFiles": [
+    //     "${workspaceRoot}/node_modules/**/*.js",
+    //     "<node_internals>/**"
+    //   ]
+    // },
+    {
+      "name": "Debug All Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        "--runInBand", "--verbose"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+    },
+    {
+      "name": "Debug Current Test",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        "--runInBand", "--verbose", "${fileBasename}", 
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+    },
+    {
+      "name": "Debug All Tests (e2e)",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        "--runInBand", "--detectOpenHandles", "--verbose", "--config", "./test/jest-e2e.json", 
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+    }
+  ]
+}

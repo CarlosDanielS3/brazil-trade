@@ -4,16 +4,8 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 export class UpdateUserDto {
   @ApiProperty({ required: false })
   @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
-  @ApiProperty({ required: false })
-  @IsNotEmpty()
   @IsString()
-  readonly nome: string;
-  @ApiProperty({ required: false })
-  @IsNotEmpty()
-  @IsString()
-  readonly password: string;
+  readonly name: string;
 }
 
 export class AddUserDto {
