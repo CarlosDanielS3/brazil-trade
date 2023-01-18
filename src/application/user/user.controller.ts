@@ -6,11 +6,13 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AddUserUseCase } from 'src/usecases/user/add-user.usecase';
 import { DeleteUserUseCase } from 'src/usecases/user/delete-user.usecase';
 import { UpdateUserUseCase } from 'src/usecases/user/update-user.usecase';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { AddUserDto, UpdateUserDto } from './user.dto';
 import { UserPresenter } from './user.presenter';
 

@@ -4,6 +4,7 @@ import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
 import { RepositoriesModule } from './infrastructure/repositories/repositories.module';
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { UserModule } from './application/user/user.module';
+import { AuthModule } from './application/auth/auth.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UserModule } from './application/user/user.module';
     RepositoriesModule,
     PrismaModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

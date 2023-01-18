@@ -6,10 +6,6 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @IsString()
   readonly name: string;
-  @ApiProperty({ required: false })
-  @IsNotEmpty()
-  @IsString()
-  readonly password: string;
 }
 
 export class AddUserDto {

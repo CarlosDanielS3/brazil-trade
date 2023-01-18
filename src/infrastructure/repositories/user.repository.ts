@@ -32,4 +32,9 @@ export class DatabaseUserRepository implements UserRepository {
   async deleteById(id: number): Promise<void> {
     await this.prisma.user.deleteMany({ where: { id } });
   }
+  async findByEmail(email: string): Promise<User> {
+    return await this.prisma.user.findUniqueOrThrow({
+      where: { email },
+    });
+  }
 }
