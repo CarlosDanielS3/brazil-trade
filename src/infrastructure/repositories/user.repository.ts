@@ -1,12 +1,12 @@
 import { UpdateUserDto } from './../../application/user/user.dto';
 import { User } from '@prisma/client';
-import { UserRepository } from './../../domain/user/user.repository';
+import { IUserRepository } from './../../domain/user/user.repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AddUserDto } from 'src/application/user/user.dto';
 
 @Injectable()
-export class DatabaseUserRepository implements UserRepository {
+export class DatabaseUserRepository implements IUserRepository {
   constructor(private prisma: PrismaService) {}
 
   async update(id: number, data: UpdateUserDto): Promise<void> {
