@@ -1,3 +1,5 @@
+import { IUserRepository } from '@/domain/user/user.repository';
+import { Inject } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { AddUserDto } from 'src/application/user/user.dto';
@@ -7,7 +9,8 @@ import { DatabaseUserRepository } from 'src/infrastructure/repositories/user.rep
 @Injectable()
 export class AddUserUseCase {
   constructor(
-    private readonly userRepository: DatabaseUserRepository,
+    @Inject(DatabaseUserRepository)
+    private readonly userRepository: IUserRepository,
     private readonly cryptoHelper: CryptoHelper,
   ) {}
 
