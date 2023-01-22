@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { AddUserDto } from 'src/application/user/user.dto';
-import { CryptoHelper } from 'src/infrastructure/common/helper/crypto.helper';
-import { DatabaseUserRepository } from 'src/infrastructure/repositories/user.repository';
+import { AddUserDto } from '@/presentation/user/user.dto';
+import { CryptoHelper } from '@Helper/crypto.helper';
+import { DatabaseUserRepository } from '@/infrastructure/repositories/user.repository';
 
 @Injectable()
 export class AddUserUseCase {

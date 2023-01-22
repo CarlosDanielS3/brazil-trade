@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateUserDto } from 'src/application/user/user.dto';
-import { DatabaseUserRepository } from 'src/infrastructure/repositories/user.repository';
+import { UpdateUserDto } from '@/presentation/user/user.dto';
+import { DatabaseUserRepository } from '@/infrastructure/repositories/user.repository';
 
 @Injectable()
 export class UpdateUserUseCase {

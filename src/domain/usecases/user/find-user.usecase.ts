@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
-import { DatabaseUserRepository } from 'src/infrastructure/repositories/user.repository';
+import { DatabaseUserRepository } from '@/infrastructure/repositories/user.repository';
 
 @Injectable()
 export class FindUserUseCase {

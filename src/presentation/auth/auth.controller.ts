@@ -1,5 +1,6 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { LoginDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 
@@ -9,7 +10,8 @@ export class AuthController {
   @Post('auth/login')
   @UseGuards(LocalAuthGuard)
   @ApiTags('auth')
-  async login(@Body() body: { email: string; password: string }) {
+  async login(@Body() body: LoginDto) {
+    console.log('body', body);
     return await this.authService.login(body);
   }
 }

@@ -1,5 +1,5 @@
 import { CryptoHelper } from '@/infrastructure/common/helper/crypto.helper';
-import { FindUserUseCase } from '@/usecases/user/find-user.usecase';
+import { FindUserUseCase } from '@/domain/usecases/user/find-user.usecase';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
