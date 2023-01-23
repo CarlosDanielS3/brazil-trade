@@ -11,13 +11,36 @@ datasource db {
 }
 
 model User {
-  id    Int     @default(autoincrement()) @id
-  email String  @unique
-  name  String
-  password String
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  name       String
+  password   String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  @@map("users")
 
- 
+  @@map("users")
+}
+
+model Category {
+  id         Int       @id @default(autoincrement())
+  name       String
+  father_id  Int?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  Product    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  title        String
+  price       Float
+  description String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  category_id Int
+  category    Category @relation(fields: [category_id], references: [id])
+
+  @@map("products")
 }

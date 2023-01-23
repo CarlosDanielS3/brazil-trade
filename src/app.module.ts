@@ -7,6 +7,8 @@ import { UserModule } from './presentation/user/user.module';
 import { AuthModule } from './presentation/auth/auth.module';
 import { ZodValidationPipe } from 'nestjs-zod';
 import { APP_PIPE } from '@nestjs/core';
+import { CategoryModule } from './presentation/category/category.module';
+import { ProductModule } from './presentation/product/product.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { APP_PIPE } from '@nestjs/core';
     PrismaModule,
     UserModule,
     AuthModule,
+    CategoryModule,
+    ProductModule,
   ],
   controllers: [],
   providers: [
