@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-export interface UserRepository {
+export interface IUserRepository {
   insert(user: Partial<User>): Promise<User>;
   findAll(): Promise<User[]>;
   findById(id: number): Promise<User>;
