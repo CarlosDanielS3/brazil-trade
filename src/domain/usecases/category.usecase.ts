@@ -1,4 +1,4 @@
-import { DatabaseCategoryRepository } from '@/infrastructure/repositories/catogorie.repositorie';
+import { DatabaseCategoryRepository } from '@/infrastructure/repositories/category.repository';
 import {
   AddCategoryDto,
   UpdateCategoryDto,
