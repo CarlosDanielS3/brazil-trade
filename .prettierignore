@@ -1,3 +1,4 @@
 .eslintignore
 .husky/*
 .prettierignore
+prisma/*
