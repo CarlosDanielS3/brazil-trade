@@ -12,7 +12,6 @@ import { ApiExtraModels, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AddUserUseCase } from '@/domain/usecases/user/add-user.usecase';
 import { DeleteUserUseCase } from '@/domain/usecases/user/delete-user.usecase';
 import { UpdateUserUseCase } from '@/domain/usecases/user/update-user.usecase';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { AddUserDto, UpdateUserDto } from './user.dto';
 import { UserPresenter } from './user.presenter';
 

@@ -1,7 +1,8 @@
 import { CryptoHelper } from '@/infrastructure/common/helper/crypto.helper';
 import { FindUserUseCase } from '@/domain/usecases/user/find-user.usecase';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -11,19 +12,17 @@ export class AuthService {
     private readonly cryptoHelper: CryptoHelper,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.findUserUseCase.findByEmail(username);
-    if (user && (await this.cryptoHelper.compare(pass, user.password))) {
-      const { password, ...result } = user;
-      return result;
+  async login(login: LoginDto) {
+    const user = await this.findUserUseCase.findByEmail(login.email);
+    if (
+      user &&
+      (await this.cryptoHelper.compare(login.password, user.password))
+    ) {
+      const payload = { username: user.name, sub: user.id };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
     }
-    return null;
-  }
-
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.userId };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    throw new BadRequestException('Invalid credentials');
   }
 }

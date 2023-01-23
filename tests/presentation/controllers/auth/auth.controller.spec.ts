@@ -3,7 +3,6 @@ import { RepositoriesModule } from '@/infrastructure/repositories/repositories.m
 import { LoginDto } from '@/presentation/auth/auth.dto';
 import { AuthService } from '@/presentation/auth/auth.service';
 import { JwtStrategy } from '@/presentation/auth/jwt.strategy';
-import { LocalStrategy } from '@/presentation/auth/local.strategy';
 import { UserModule } from '@/presentation/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -23,7 +22,7 @@ describe('AuthController', () => {
         HelpersModule,
         JwtModule,
       ],
-      providers: [AuthService, LocalStrategy, JwtStrategy],
+      providers: [AuthService, JwtStrategy],
     }).compile();
 
     authController = module.get<AuthController>(AuthController);
