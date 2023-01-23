@@ -27,7 +27,7 @@ model Category {
   father_id  Int?
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
-  Product    Product[]
+  Products    Product[]
 
   @@map("categories")
 }

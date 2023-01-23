@@ -35,7 +35,7 @@ export class ProductController {
 
   @Delete('/:id')
   @HttpCode(204)
-  async deleteUser(@Param('id') id: string): Promise<void> {
+  async deleteProduct(@Param('id') id: string): Promise<void> {
     return await this.productUseCase.delete(Number(id));
   }
 }

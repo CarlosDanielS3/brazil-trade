@@ -30,7 +30,7 @@ export class DatabaseUserRepository implements IUserRepository {
     });
   }
   async deleteById(id: number): Promise<void> {
-    await this.prisma.product.findUniqueOrThrow({
+    await this.prisma.user.findUniqueOrThrow({
       where: { id },
     });
     await this.prisma.user.delete({ where: { id } });

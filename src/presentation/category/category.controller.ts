@@ -35,7 +35,7 @@ export class CategoryController {
 
   @Delete('/:id')
   @HttpCode(204)
-  async deleteUser(@Param('id') id: string): Promise<void> {
+  async deleteCategory(@Param('id') id: string): Promise<void> {
     return await this.categoryUseCase.delete(Number(id));
   }
 }

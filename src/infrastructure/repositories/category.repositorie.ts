@@ -33,7 +33,7 @@ export class DatabaseCategoryRepository implements ICategoryRepository {
     });
   }
   async deleteById(id: number): Promise<void> {
-    await this.prisma.product.findUniqueOrThrow({
+    await this.prisma.category.findUniqueOrThrow({
       where: { id },
     });
     await this.prisma.category.delete({ where: { id } });
