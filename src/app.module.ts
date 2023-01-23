@@ -5,6 +5,8 @@ import { RepositoriesModule } from './infrastructure/repositories/repositories.m
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { UserModule } from './presentation/user/user.module';
 import { AuthModule } from './presentation/auth/auth.module';
+import { ZodValidationPipe } from 'nestjs-zod';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -16,6 +18,11 @@ import { AuthModule } from './presentation/auth/auth.module';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ZodValidationPipe,
+    },
+  ],
 })
 export class AppModule {}

@@ -3,10 +3,10 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
-import { AllExceptionFilter } from './infrastructure/common/filter/exception.filter';
-import { LoggingInterceptor } from './infrastructure/common/interceptors/logger.interceptor';
-import { LoggerService } from './infrastructure/logger/logger.service';
-import { JwtAuthGuard } from './presentation/auth/jwt.auth.guard';
+import { AllExceptionFilter } from '@/infrastructure/common/filter/exception.filter';
+import { LoggingInterceptor } from '@/infrastructure/common/interceptors/logger.interceptor';
+import { LoggerService } from '@/infrastructure/logger/logger.service';
+import { JwtAuthGuard } from '@/presentation/auth/jwt.auth.guard';
 
 async function bootstrap() {
   const env = process.env.NODE_ENV;

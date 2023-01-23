@@ -1,18 +1,26 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { z } from 'zod';
+import { createZodDto } from 'nestjs-zod';
+import { z } from 'nestjs-zod/z';
 
-const AddUserDto = z.object({
+const AddUserSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(8).max(255),
+  password: z
+    .string()
+    .min(8)
+    .max(255)
+    .regex(
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
+      {
+        message:
+          'The password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+      },
+    ),
   name: z.string().min(2).max(255),
 });
-ApiProperty({ type: AddUserDto });
 
-export type AddUserDto = z.infer<typeof AddUserDto>;
+export class AddUserDto extends createZodDto(AddUserSchema) {}
 
-const UpdateUserDto = z.object({
+const UpdateUserSchema = z.object({
   name: z.string().min(2).max(255),
 });
-ApiProperty({ type: UpdateUserDto });
 
-export type UpdateUserDto = z.infer<typeof UpdateUserDto>;
+export class UpdateUserDto extends createZodDto(UpdateUserSchema) {}
