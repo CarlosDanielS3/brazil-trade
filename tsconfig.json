@@ -6,19 +6,17 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "checkJs": false,
     "target": "es2017",
     "sourceMap": true,
+    "strict": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-        "paths": {
-          "@/*": [
-            "src/*"
-          ],
-          "@Helper/*": [
-            "src/common/helper/*"
-          ]
-        }
+    "paths": {
+      "@/*": ["src/*"],
+      "@Helper/*": ["src/infrastructure/common/helper/*"]
+    }
   }
 }

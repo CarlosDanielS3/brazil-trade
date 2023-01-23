@@ -7,7 +7,7 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class CryptoHelper {
   private readonly iv: Buffer = randomBytes(16);
-  private readonly password: string = process.env.CRYPTO_PASSWORD;
+  private readonly password: string = process.env.CRYPTO_PASSWORD as string;
   async encrypt(textToEncrypt: string) {
     const key = (await promisify(scrypt)(this.password, 'salt', 32)) as Buffer;
     const cipher = createCipheriv('aes-256-ctr', key, this.iv);

@@ -1,9 +1,9 @@
-import { UpdateUserDto } from './../../application/user/user.dto';
+import { UpdateUserDto } from '../../presentation/user/user.dto';
 import { User } from '@prisma/client';
-import { IUserRepository } from './../../domain/user/user.repository';
+import { IUserRepository } from '../../domain/repositories/user.repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AddUserDto } from 'src/application/user/user.dto';
+import { AddUserDto } from '@/presentation/user/user.dto';
 
 @Injectable()
 export class DatabaseUserRepository implements IUserRepository {
@@ -30,7 +30,10 @@ export class DatabaseUserRepository implements IUserRepository {
     });
   }
   async deleteById(id: number): Promise<void> {
-    await this.prisma.user.deleteMany({ where: { id } });
+    await this.prisma.user.findUniqueOrThrow({
+      where: { id },
+    });
+    await this.prisma.user.delete({ where: { id } });
   }
   async findByEmail(email: string): Promise<User> {
     return await this.prisma.user.findUniqueOrThrow({
