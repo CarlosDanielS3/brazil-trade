@@ -22,7 +22,7 @@ export class CategoryUseCase {
   }
 
   async delete(id: number): Promise<void> {
-    const products = await this.productRepository.findByAnyField({
+    const products = await this.productRepository.findAllByAnyField({
       category_id: id,
     });
     if (products.length)
