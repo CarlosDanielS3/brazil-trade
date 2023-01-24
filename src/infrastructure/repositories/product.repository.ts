@@ -1,15 +1,16 @@
 import { Product } from '@prisma/client';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-
-import { IProductRepository } from '@/domain/repositories/product.repository';
 import {
   UpdateProductDto,
   AddProductDto,
 } from '@/presentation/product/product.dto';
+import { IGenericRepository } from '@/domain/repositories/generic.repository';
 
 @Injectable()
-export class DatabaseProductRepository implements IProductRepository {
+export class DatabaseProductRepository
+  implements IGenericRepository<Product, AddProductDto, UpdateProductDto>
+{
   constructor(private prisma: PrismaService) {}
 
   async update(id: number, data: UpdateProductDto): Promise<void> {
@@ -32,6 +33,23 @@ export class DatabaseProductRepository implements IProductRepository {
       where: { id },
     });
   }
+
+  async findOneByAnyField(fields: {
+    [key: string]: string | boolean | number | Date;
+  }): Promise<Product> {
+    return await this.prisma.product.findFirstOrThrow({
+      where: fields,
+    });
+  }
+
+  async findAllByAnyField(fields: {
+    [key: string]: string | boolean | number | Date;
+  }): Promise<Product[]> {
+    return await this.prisma.product.findMany({
+      where: fields,
+    });
+  }
+
   async deleteById(id: number): Promise<void> {
     await this.prisma.product.findUniqueOrThrow({
       where: { id },

@@ -13,7 +13,7 @@ export class UserUseCase {
 
   async create(user: AddUserDto): Promise<User> {
     const userAlreadyExists = await this.userRepository
-      .findByEmail(user.email)
+      .findOneByAnyField({ email: user.email })
       .catch(() => false);
     if (userAlreadyExists)
       throw new BadRequestException(
@@ -26,11 +26,11 @@ export class UserUseCase {
     return await this.userRepository.insert(userWithHashedPassword);
   }
   async update(id: number, user: UpdateUserDto): Promise<void> {
-    await this.userRepository.findById(id);
+    await this.userRepository.findOneByAnyField({ id });
     return await this.userRepository.update(id, user);
   }
   async findByEmail(email: string): Promise<User> {
-    return await this.userRepository.findByEmail(email);
+    return await this.userRepository.findOneByAnyField({ email });
   }
   async delete(id: number): Promise<void> {
     return await this.userRepository.deleteById(id);
