@@ -14,6 +14,7 @@ export class ProductUseCase {
     private readonly productRepository: DatabaseProductRepository,
     private readonly categoryRepository: DatabaseCategoryRepository,
   ) {}
+
   async create(product: AddProductDto): Promise<Product> {
     await this.categoryRepository.findById(product.category_id);
     return await this.productRepository.insert(product);
@@ -22,7 +23,6 @@ export class ProductUseCase {
     await this.productRepository.findById(id);
     return await this.productRepository.update(id, product);
   }
-
   async delete(id: number): Promise<void> {
     return await this.productRepository.deleteById(id);
   }
