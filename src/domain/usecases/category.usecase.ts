@@ -1,15 +1,17 @@
-import { DatabaseCategoryRepository } from '@/infrastructure/repositories/catogorie.repositorie';
+import { DatabaseCategoryRepository } from '@/infrastructure/repositories/category.repository';
+import { DatabaseProductRepository } from '@/infrastructure/repositories/product.repository';
 import {
   AddCategoryDto,
   UpdateCategoryDto,
 } from '@/presentation/category/category.dto';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Category } from '@prisma/client';
 
 @Injectable()
 export class CategoryUseCase {
   constructor(
     private readonly categoryRepository: DatabaseCategoryRepository,
+    private readonly productRepository: DatabaseProductRepository,
   ) {}
   async create(category: AddCategoryDto): Promise<Category> {
     return await this.categoryRepository.insert(category);
@@ -20,6 +22,16 @@ export class CategoryUseCase {
   }
 
   async delete(id: number): Promise<void> {
+    const products = await this.productRepository.findByAnyField({
+      category_id: id,
+    });
+    if (products.length)
+      throw new BadRequestException(
+        `the category with id [${id}] have relations with products ids [${products
+          .map((product) => product.id)
+          .join(', ')}] and can't be deleted`,
+      );
+
     return await this.categoryRepository.deleteById(id);
   }
 }
