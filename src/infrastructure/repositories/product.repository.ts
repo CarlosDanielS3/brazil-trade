@@ -32,6 +32,11 @@ export class DatabaseProductRepository implements IProductRepository {
       where: { id },
     });
   }
+  async findByAnyField(value: any): Promise<Product[]> {
+    return await this.prisma.product.findMany({
+      where: value,
+    });
+  }
   async deleteById(id: number): Promise<void> {
     await this.prisma.product.findUniqueOrThrow({
       where: { id },
