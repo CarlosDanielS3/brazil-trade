@@ -2,16 +2,15 @@ import { RepositoriesModule } from '@/infrastructure/repositories/repositories.m
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 import { HelpersModule } from '@/infrastructure/common/helper/helper.module';
+import { UserUseCase } from '@/domain/usecases/user.usecase';
 
 @Module({
   imports: [
-    UserModule,
     PassportModule,
     RepositoriesModule,
     HelpersModule,
@@ -21,6 +20,6 @@ import { HelpersModule } from '@/infrastructure/common/helper/helper.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, UserUseCase],
 })
 export class AuthModule {}

@@ -6,6 +6,12 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
+  'prettier/prettier': [
+    'error',
+    {
+      endOfLine: crlf,
+    },
+  ],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',

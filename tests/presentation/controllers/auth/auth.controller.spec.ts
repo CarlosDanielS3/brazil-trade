@@ -1,82 +1,84 @@
-import { HelpersModule } from '@/infrastructure/common/helper/helper.module';
-import { RepositoriesModule } from '@/infrastructure/repositories/repositories.module';
-import { LoginDto } from '@/presentation/auth/auth.dto';
+import { AuthController } from '@/presentation/auth/auth.controller';
 import { AuthService } from '@/presentation/auth/auth.service';
-import { JwtStrategy } from '@/presentation/auth/jwt.strategy';
-import { UserModule } from '@/presentation/user/user.module';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from '../../../../src/presentation/auth/auth.controller';
+import { Test } from '@nestjs/testing';
+import { UserUseCase } from '@/domain/usecases/user.usecase';
+import { User } from '@prisma/client';
+import { CryptoHelper } from '@/infrastructure/common/helper/crypto.helper';
+import { LoginDto } from '@/presentation/auth/auth.dto';
+import { JwtService } from '@nestjs/jwt';
+import { DatabaseUserRepository } from '@/infrastructure/repositories/user.repository';
+import { PrismaService } from '@/infrastructure/prisma/prisma.service';
+import { BadRequestException } from '@nestjs/common';
 
 describe('AuthController', () => {
   let authController: AuthController;
+  let authService: AuthService;
+  let userUseCase: UserUseCase;
+  let userRepository: DatabaseUserRepository;
+  let prismaService: PrismaService;
+  let cryptoHelper: CryptoHelper;
+  let jwtService: JwtService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
       controllers: [AuthController],
-      imports: [
-        UserModule,
-        PassportModule,
-        RepositoriesModule,
-        HelpersModule,
-        JwtModule,
+      providers: [
+        AuthService,
+        UserUseCase,
+        CryptoHelper,
+        JwtService,
+        DatabaseUserRepository,
+        PrismaService,
       ],
-      providers: [AuthService, JwtStrategy],
     }).compile();
 
-    authController = module.get<AuthController>(AuthController);
+    authService = moduleRef.get<AuthService>(AuthService);
+    authController = moduleRef.get<AuthController>(AuthController);
+    userUseCase = moduleRef.get<UserUseCase>(UserUseCase);
+    userRepository = moduleRef.get<DatabaseUserRepository>(
+      DatabaseUserRepository,
+    );
+    prismaService = moduleRef.get<PrismaService>(PrismaService);
+    cryptoHelper = moduleRef.get<CryptoHelper>(CryptoHelper);
+    jwtService = moduleRef.get<JwtService>(JwtService);
   });
 
-  it('should be defined', () => {
-    expect(authController).toBeDefined();
-  });
+  describe('login', () => {
+    const loginMock: LoginDto = {
+      email: 'piep@kumok.gf',
+      password: 'pass123',
+    };
+    const user: User = {
+      id: 1,
+      email: loginMock.email,
+      name: 'Viola Armstrong',
+      password: loginMock.password,
+      created_at: new Date(),
+      updated_at: new Date(),
+    };
+    it('should be able to login in the application', async () => {
+      const hashedPass = await cryptoHelper.hash(loginMock.password);
+      user.password = hashedPass;
+      jest.spyOn(userUseCase, 'findByEmail').mockResolvedValueOnce(user);
+      jest
+        .spyOn(jwtService, 'sign')
+        .mockImplementationOnce(() => 'access_token');
 
-  const mockRequest = (): LoginDto => ({
-    email: 'emailmock@gmail.com',
-    password: 'passwordmock',
-  });
-});
-type SutTypes = {
-  sut: AuthController;
-};
-// const makeSut = (): SutTypes => {
-//   const authServiceSpy = new AuthServiceSpy();
-//   const sut = new AuthController();
-//   return {
-//     sut,
-//     authServiceSpy,
-//   };
-// };
+      expect(await authController.login(loginMock)).toStrictEqual({
+        access_token: 'access_token',
+      });
+    });
 
-describe('AddSurvey AuthController', () => {
-  // test('Should call Validation with correct values', async () => {
-  //   // const { sut, validationSpy } = makeSut();
-  //   // const request = mockRequest();
-  //   // await sut.handle(request);
-  //   // expect(validationSpy.input).toEqual(request);
-  // });
-  // test('Should return 400 if Validation fails', async () => {
-  //   const { sut, validationSpy } = makeSut();
-  //   validationSpy.error = new Error();
-  //   const httpResponse = await sut.handle(mockRequest());
-  //   expect(httpResponse).toEqual(badRequest(validationSpy.error));
-  // });
-  // test('Should call AddSurvey with correct values', async () => {
-  //   const { sut, addSurveySpy } = makeSut();
-  //   const request = mockRequest();
-  //   await sut.handle(request);
-  //   expect(addSurveySpy.params).toEqual({ ...request, date: new Date() });
-  // });
-  // test('Should return 500 if AddSurvey throws', async () => {
-  //   const { sut, addSurveySpy } = makeSut();
-  //   jest.spyOn(addSurveySpy, 'add').mockImplementationOnce(throwError);
-  //   const httpResponse = await sut.handle(mockRequest());
-  //   expect(httpResponse).toEqual(serverError(new Error()));
-  // });
-  // test('Should return 204 on success', async () => {
-  //   const { sut } = makeSut();
-  //   const httpResponse = await sut.handle(mockRequest());
-  //   expect(httpResponse).toEqual(noContent());
-  // });
+    it('should throw error if login is wrong', async () => {
+      jest.spyOn(userUseCase, 'findByEmail').mockResolvedValueOnce(user);
+      jest
+        .spyOn(jwtService, 'sign')
+        .mockImplementationOnce(() => 'access_token');
+      user.password = 'wrongPass';
+
+      await expect(authController.login(loginMock)).rejects.toEqual(
+        new BadRequestException('Invalid credentials'),
+      );
+    });
+  });
 });
