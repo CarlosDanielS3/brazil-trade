@@ -30,6 +30,7 @@ model Category {
   products    Product[]
 
   @@map("categories")
+  @@unique([name, father_id], name: "category_name_father_id_unique")
 }
 
 model Product {

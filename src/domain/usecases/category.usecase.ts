@@ -14,6 +14,13 @@ export class CategoryUseCase {
     private readonly productRepository: DatabaseProductRepository,
   ) {}
   async create(category: AddCategoryDto): Promise<Category> {
+    const categoryExists = await this.categoryRepository.findOneByAnyField({
+      name: category.name,
+    });
+
+    if (categoryExists && categoryExists.father_id == category.father_id)
+      throw new BadRequestException('category already exists');
+
     return await this.categoryRepository.insert(category);
   }
   async update(id: number, category: UpdateCategoryDto): Promise<void> {
