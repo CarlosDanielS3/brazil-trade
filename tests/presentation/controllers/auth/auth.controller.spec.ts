@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { DatabaseUserRepository } from '@/infrastructure/repositories/user.repository';
 import { PrismaService } from '@/infrastructure/prisma/prisma.service';
 import { BadRequestException } from '@nestjs/common';
+import { describe, it, beforeAll, vi, expect } from 'vitest';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -59,10 +60,8 @@ describe('AuthController', () => {
     it('should be able to login in the application', async () => {
       const hashedPass = await cryptoHelper.hash(loginMock.password);
       user.password = hashedPass;
-      jest.spyOn(userUseCase, 'findByEmail').mockResolvedValueOnce(user);
-      jest
-        .spyOn(jwtService, 'sign')
-        .mockImplementationOnce(() => 'access_token');
+      vi.spyOn(userUseCase, 'findByEmail').mockResolvedValueOnce(user);
+      vi.spyOn(jwtService, 'sign').mockImplementationOnce(() => 'access_token');
 
       expect(await authController.login(loginMock)).toStrictEqual({
         access_token: 'access_token',
@@ -70,10 +69,8 @@ describe('AuthController', () => {
     });
 
     it('should throw error if login is wrong', async () => {
-      jest.spyOn(userUseCase, 'findByEmail').mockResolvedValueOnce(user);
-      jest
-        .spyOn(jwtService, 'sign')
-        .mockImplementationOnce(() => 'access_token');
+      vi.spyOn(userUseCase, 'findByEmail').mockResolvedValueOnce(user);
+      vi.spyOn(jwtService, 'sign').mockImplementationOnce(() => 'access_token');
       user.password = 'wrongPass';
 
       await expect(authController.login(loginMock)).rejects.toEqual(
