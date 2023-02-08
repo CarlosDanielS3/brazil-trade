@@ -17,7 +17,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@test/*": ["tests/*"],
-      "@helper/*": ["src/infrastructure/common/helper/*"]
+      "@Helper/*": ["src/infrastructure/common/helper/*"]
     }
   }
 }
