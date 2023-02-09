@@ -7,14 +7,14 @@ import {
   UpdateCategoryDto,
 } from '@/presentation/category/category.dto';
 import { Test } from '@nestjs/testing';
-import { Category } from '@prisma/client';
-import prisma from '@test/mock/prisma/prisma-service.mock';
+import { Category, PrismaClient } from '@prisma/client';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { faker } from '@faker-js/faker';
 import { BadRequestException } from '@nestjs/common';
-import { describe, it, vi, beforeAll, expect } from 'vitest';
 
 describe('categoryUseCase', () => {
   let categoryUseCase: CategoryUseCase;
+  let prismaService: DeepMockProxy<PrismaClient>;
   let categoryRepository: DatabaseCategoryRepository;
 
   beforeAll(async () => {
@@ -24,22 +24,21 @@ describe('categoryUseCase', () => {
         CategoryUseCase,
         DatabaseCategoryRepository,
         DatabaseProductRepository,
-        { provide: PrismaService, useValue: prisma },
+        PrismaService,
       ],
     })
       .overrideProvider(PrismaService)
-      .useValue(prisma)
+      .useValue(mockDeep<PrismaClient>())
       .compile();
 
     categoryRepository = moduleRef.get<DatabaseCategoryRepository>(
       DatabaseCategoryRepository,
     );
     categoryUseCase = moduleRef.get<CategoryUseCase>(CategoryUseCase);
-
+    prismaService = moduleRef.get(PrismaService);
   });
 
   describe('create category', () => {
-    vi.mock('@/infrastructure/prisma/prisma.service');
     it('should be able to create a new category', async () => {
       const createCategoryMock = {
         name: faker.name.firstName(),
@@ -52,7 +51,7 @@ describe('categoryUseCase', () => {
         created_at: new Date(),
         updated_at: new Date(),
       };
-      prisma.category.create.mockResolvedValueOnce(categoryMock);
+      prismaService.category.create.mockResolvedValueOnce(categoryMock);
 
       await expect(categoryUseCase.create(createCategoryMock)).resolves.toEqual(
         categoryMock,
@@ -73,10 +72,10 @@ describe('categoryUseCase', () => {
         updated_at: new Date(),
       };
 
-      vi.spyOn(categoryRepository, 'findOneByAnyField').mockResolvedValueOnce(
-        categoryMock,
-      );
-      prisma.category.create.mockResolvedValueOnce(categoryMock);
+      jest
+        .spyOn(categoryRepository, 'findOneByAnyField')
+        .mockResolvedValueOnce(categoryMock);
+      prismaService.category.create.mockResolvedValueOnce(categoryMock);
 
       await expect(
         categoryUseCase.create(createCategoryMock),
@@ -97,10 +96,10 @@ describe('categoryUseCase', () => {
         created_at: new Date(),
         updated_at: new Date(),
       };
-      prisma.category.update.mockResolvedValueOnce(categoryMock);
-      vi.spyOn(categoryRepository, 'findById').mockResolvedValueOnce(
-        categoryMock,
-      );
+      prismaService.category.update.mockResolvedValueOnce(categoryMock);
+      jest
+        .spyOn(categoryRepository, 'findById')
+        .mockResolvedValueOnce(categoryMock);
 
       await expect(categoryUseCase.update(1, createCategoryMock)).resolves.toBe(
         void 0,
@@ -112,7 +111,7 @@ describe('categoryUseCase', () => {
         name: faker.name.firstName(),
       } as UpdateCategoryDto;
 
-      prisma.category.update.mockRejectedValueOnce(
+      prismaService.category.update.mockRejectedValueOnce(
         new Error('Category not found'),
       );
 
@@ -125,7 +124,7 @@ describe('categoryUseCase', () => {
         name: faker.name.firstName(),
       } as UpdateCategoryDto;
 
-      prisma.category.update.mockRejectedValueOnce(
+      prismaService.category.update.mockRejectedValueOnce(
         new Error('Constraint violation'),
       );
 
@@ -144,15 +143,15 @@ describe('categoryUseCase', () => {
         created_at: new Date(),
         updated_at: new Date(),
       };
-      prisma.product.findMany.mockResolvedValueOnce([]);
-      prisma.category.delete.mockReturnThis();
+      prismaService.product.findMany.mockResolvedValueOnce([]);
+      prismaService.category.delete.mockReturnThis();
 
       await expect(categoryUseCase.delete(1)).resolves.toBe(void 0);
     });
 
     it('should not be able to delete a category that does not exists', async () => {
-      prisma.product.findMany.mockResolvedValueOnce([]);
-      prisma.category.delete.mockRejectedValueOnce(
+      prismaService.product.findMany.mockResolvedValueOnce([]);
+      prismaService.category.delete.mockRejectedValueOnce(
         new Error('Category not found'),
       );
 
@@ -172,8 +171,8 @@ describe('categoryUseCase', () => {
           category_id: category_id,
         },
       ];
-      prisma.product.findMany.mockResolvedValueOnce(productsMock);
-      prisma.category.delete.mockRejectedValueOnce(
+      prismaService.product.findMany.mockResolvedValueOnce(productsMock);
+      prismaService.category.delete.mockRejectedValueOnce(
         new BadRequestException(
           `the category with id ${category_id} have relations with products ids [${productsMock
             .map((product) => product.id)

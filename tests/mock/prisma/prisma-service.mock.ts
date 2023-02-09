@@ -1,12 +1,16 @@
-import { PrismaClient } from '@prisma/client'
-import { beforeEach } from 'vitest'
-import { mockDeep, mockReset } from 'vitest-mock-extended'
+import { PrismaClient } from '@prisma/client';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 
-// 2
-beforeEach(() => {
-  mockReset(prisma)
-})
+export type Context = {
+  prisma: PrismaClient;
+};
 
-// 3
-const prisma = mockDeep<PrismaClient>()
-export default prisma
+export type MockContext = {
+  prisma: DeepMockProxy<PrismaClient>;
+};
+
+export const createMockContext = (): MockContext => {
+  return {
+    prisma: mockDeep<PrismaClient>(),
+  };
+};

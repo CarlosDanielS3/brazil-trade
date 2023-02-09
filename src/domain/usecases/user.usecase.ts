@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { AddUserDto, UpdateUserDto } from '@/presentation/user/user.dto';
-import { CryptoHelper } from '@helper/crypto.helper';
+import { CryptoHelper } from '@Helper/crypto.helper';
 import { DatabaseUserRepository } from '@/infrastructure/repositories/user.repository';
 
 @Injectable()

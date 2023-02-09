@@ -7,6 +7,7 @@ import {
   UpdateCategoryDto,
   AddCategoryDto,
 } from '@/presentation/category/category.dto';
+import { Context } from '@test/mock/prisma/prisma-service.mock';
 
 @Injectable()
 export class DatabaseCategoryRepository

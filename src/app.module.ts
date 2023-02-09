@@ -5,7 +5,7 @@ import { RepositoriesModule } from './infrastructure/repositories/repositories.m
 import { PrismaModule } from './infrastructure/prisma/prisma.module';
 import { UserModule } from './presentation/user/user.module';
 import { AuthModule } from './presentation/auth/auth.module';
-import { ZodValidationPipe } from 'nestjs-zod';
+import { ZodValidationPipe } from '@anatine/zod-nestjs';
 import { APP_PIPE } from '@nestjs/core';
 import { CategoryModule } from './presentation/category/category.module';
 import { ProductModule } from './presentation/product/product.module';

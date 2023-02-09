@@ -14,7 +14,6 @@ export class CategoryUseCase {
     private readonly productRepository: DatabaseProductRepository,
   ) {}
   async create(category: AddCategoryDto): Promise<Category> {
-    console.log(this.categoryRepository)
     const categoryExists = await this.categoryRepository.findOneByAnyField({
       name: category.name,
     });
