@@ -21,6 +21,9 @@ export class ProductUseCase {
   }
   async update(id: number, product: UpdateProductDto): Promise<void> {
     await this.productRepository.findById(id);
+    if (product.category_id) {
+      await this.categoryRepository.findById(product.category_id);
+    }
     return await this.productRepository.update(id, product);
   }
   async delete(id: number): Promise<void> {
